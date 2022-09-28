@@ -1,10 +1,10 @@
 import { Container, CreateBar, Header, Body, Todos, Input, Item, FinalItem, MainContainer, ThemeIcon, DeleteIcon, CheckIcon, HeaderContent, TextTodo } from './style.js';
-import { ReactComponent as Moon} from './todo-app-main/images/icon-moon.svg';
-import { ReactComponent as Sun} from './todo-app-main/images/icon-sun.svg';
-import { ReactComponent as Delete} from './todo-app-main/images/icon-cross.svg';
-import { ReactComponent as Check} from './todo-app-main/images/Check.svg';
-import { ReactComponent as Circle} from './todo-app-main/images/Circle.svg';
-import {useState, useEffect, useCallback} from 'react';
+import { ReactComponent as Moon } from './todo-app-main/images/icon-moon.svg';
+import { ReactComponent as Sun } from './todo-app-main/images/icon-sun.svg';
+import { ReactComponent as Delete } from './todo-app-main/images/icon-cross.svg';
+import { ReactComponent as Check } from './todo-app-main/images/Check.svg';
+import { ReactComponent as Circle } from './todo-app-main/images/Circle.svg';
+import { useState, useEffect, useCallback } from 'react';
 import { lightTheme, darkTheme } from './theme';
 
 
@@ -25,22 +25,24 @@ function App() {
 
   const themeToggler = () => {
     theme === 'light' ? setTheme('dark') : setTheme('light')
-}
+  }
 
   const data = JSON.parse(localStorage.getItem("Todo"));
 
   const loader = useCallback(() => {
     if (data !== null) {
-    if ((data.length > 0) && loaded) {
-      setTodo(data);
-      setItems(data.length);
-      setId(data.length);
+      if ((data.length > 0) && loaded) {
+        setTodo(data);
+        setItems(data.length);
+        setId(data.length);
+        setLoaded(false);
+        console.log(data);
+      }
+    }
+    else
       setLoaded(false);
-      console.log(data);
-    }}
-    else 
-      setLoaded(false);
-    ;}, [setTodo, setId, setItems, data, loaded, setLoaded])
+    ;
+  }, [setTodo, setId, setItems, data, loaded, setLoaded])
 
   useEffect(() => {
     loader();
@@ -66,7 +68,7 @@ function App() {
 
   const taskCheckToggler = (n) => {
     const tempTodo = [...todo];
-    tempTodo[n].Check === 'false' ? tempTodo[n].Check = 'true' : tempTodo[n].Check ='false';  
+    tempTodo[n].Check === 'false' ? tempTodo[n].Check = 'true' : tempTodo[n].Check = 'false';
     console.log(tempTodo[n].Check);
     setTodo(tempTodo);
     console.log(todo);
@@ -76,16 +78,16 @@ function App() {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      if(id === -1){
-        setTodo([{id: Math.random(), Note: text, Check: check}]);
+      if (id === -1) {
+        setTodo([{ id: Math.random(), Note: text, Check: check }]);
         setId(0);
         setItems(todo.length);
       } else {
-      setId(todo.length + 1);
-      setTodo([...todo,{id: Math.random(), Note: text, Check: check}]);
-      setText("");
-      console.log(todo)
-    }
+        setId(todo.length + 1);
+        setTodo([...todo, { id: Math.random(), Note: text, Check: check }]);
+        setText("");
+        console.log(todo)
+      }
     }
   }
 
@@ -93,38 +95,38 @@ function App() {
     <Container>
       <Header theme={theme === 'light' ? lightTheme : darkTheme}>
         <HeaderContent>
-        <h1 className="title">
-          T O D O
-        </h1>
-        <ThemeIcon onClick={themeToggler}>{theme === 'light' ? <Moon/> : <Sun/>}</ThemeIcon>
+          <h1 className="title">
+            T O D O
+          </h1>
+          <ThemeIcon onClick={themeToggler}>{theme === 'light' ? <Moon /> : <Sun />}</ThemeIcon>
         </HeaderContent>
       </Header>
       <Body theme={theme === 'light' ? lightTheme : darkTheme}>
         <MainContainer>
-        <CreateBar theme={theme === 'light' ? lightTheme : darkTheme}>
-        <CheckIcon onClick={checkToggler}>{check === 'true' ? <Check/> : <Circle/>}</CheckIcon>
-            <Input placeholder="Create a new todo..." value={text} theme={theme === 'light' ? lightTheme : darkTheme} onChange={textHandler} onKeyDown={handleKeyDown}/>
-        </CreateBar>
-        <Todos theme={theme === 'light' ? lightTheme : darkTheme}>
-        {id < 0 ? (<FinalItem><p>Press Enter to add a todo</p></FinalItem>) : (
-        todo.map((note, index) => ( filter === 'all' ?
-      <Item
-        theme={theme === 'light' ? lightTheme : darkTheme}
-        key={index}
-      ><CheckIcon onClick={() => taskCheckToggler(index)}>{note.Check === 'true' ? <Check/> : <Circle/>}</CheckIcon><TextTodo>{note.Note}</TextTodo><DeleteIcon><Delete onClick={(e) => deleteTodo(note.id)}/></DeleteIcon></Item>
-      : filter === 'active' ? (note.Check === 'false' &&
-      <Item
-        theme={theme === 'light' ? lightTheme : darkTheme}
-        key={index}
-      ><CheckIcon onClick={() => taskCheckToggler(index)}>{note.Check === 'true' ? <Check/> : <Circle/>}</CheckIcon><TextTodo>{note.Note}</TextTodo><DeleteIcon><Delete onClick={(e) => deleteTodo(note.id)}/></DeleteIcon></Item>)
-      : (note.Check === 'true' &&
-      <Item
-        theme={theme === 'light' ? lightTheme : darkTheme}
-        key={index}
-      ><CheckIcon onClick={() => taskCheckToggler(index)}>{note.Check === 'true' ? <Check/> : <Circle/>}</CheckIcon><TextTodo>{note.Note}</TextTodo><DeleteIcon><Delete onClick={(e) => deleteTodo(note.id)}/></DeleteIcon></Item>)
-      )))}
-        {id >= 0 && <FinalItem theme={theme === 'light' ? lightTheme : darkTheme}><p>{items} items left</p>    {filter === 'all'  ? (<div>  <p1 onClick={(e) => setFilter('all')} style={{color:"hsl(220, 98%, 61%)"}}>All</p1><p1 onClick={(e) => setFilter('active')}>Active</p1><p1 onClick={(e) => setFilter('completed')}>Completed</p1></div>) : filter === 'active'  ? (<div><p1 onClick={(e) => setFilter('all')}>All</p1><p1 onClick={(e) => setFilter('active')} style={{color:"hsl(220, 98%, 61%)"}}>Active</p1><p1 onClick={(e) => setFilter('completed')}>Completed</p1></div>) : (<div><p1 onClick={(e) => setFilter('all')}>All</p1><p1 onClick={(e) => setFilter('active')}>Active</p1><p1 onClick={(e) => setFilter('completed')} style={{color:"hsl(220, 98%, 61%)"}}>Completed</p1></div>)}    <p1 onClick={(e) => deleteChecked()}>Clear Completed</p1></FinalItem>}  
-        </Todos>
+          <CreateBar theme={theme === 'light' ? lightTheme : darkTheme}>
+            <CheckIcon onClick={checkToggler}>{check === 'true' ? <Check /> : <Circle />}</CheckIcon>
+            <Input placeholder="Create a new todo..." value={text} theme={theme === 'light' ? lightTheme : darkTheme} onChange={textHandler} onKeyDown={handleKeyDown} />
+          </CreateBar>
+          <Todos theme={theme === 'light' ? lightTheme : darkTheme}>
+            {id < 0 ? (<FinalItem><p>Press Enter to add a todo</p></FinalItem>) : (
+              todo.map((note, index) => (filter === 'all' ?
+                <Item
+                  theme={theme === 'light' ? lightTheme : darkTheme}
+                  key={index}
+                ><CheckIcon onClick={() => taskCheckToggler(index)}>{note.Check === 'true' ? <Check /> : <Circle />}</CheckIcon><TextTodo>{note.Note}</TextTodo><DeleteIcon><Delete onClick={(e) => deleteTodo(note.id)} /></DeleteIcon></Item>
+                : filter === 'active' ? (note.Check === 'false' &&
+                  <Item
+                    theme={theme === 'light' ? lightTheme : darkTheme}
+                    key={index}
+                  ><CheckIcon onClick={() => taskCheckToggler(index)}>{note.Check === 'true' ? <Check /> : <Circle />}</CheckIcon><TextTodo>{note.Note}</TextTodo><DeleteIcon><Delete onClick={(e) => deleteTodo(note.id)} /></DeleteIcon></Item>)
+                  : (note.Check === 'true' &&
+                    <Item
+                      theme={theme === 'light' ? lightTheme : darkTheme}
+                      key={index}
+                    ><CheckIcon onClick={() => taskCheckToggler(index)}>{note.Check === 'true' ? <Check /> : <Circle />}</CheckIcon><TextTodo>{note.Note}</TextTodo><DeleteIcon><Delete onClick={(e) => deleteTodo(note.id)} /></DeleteIcon></Item>)
+              )))}
+            {id >= 0 && <FinalItem theme={theme === 'light' ? lightTheme : darkTheme}><p>{items} items left</p>    {filter === 'all' ? (<div>  <p1 onClick={(e) => setFilter('all')} style={{ color: "hsl(220, 98%, 61%)" }}>All</p1><p1 onClick={(e) => setFilter('active')}>Active</p1><p1 onClick={(e) => setFilter('completed')}>Completed</p1></div>) : filter === 'active' ? (<div><p1 onClick={(e) => setFilter('all')}>All</p1><p1 onClick={(e) => setFilter('active')} style={{ color: "hsl(220, 98%, 61%)" }}>Active</p1><p1 onClick={(e) => setFilter('completed')}>Completed</p1></div>) : (<div><p1 onClick={(e) => setFilter('all')}>All</p1><p1 onClick={(e) => setFilter('active')}>Active</p1><p1 onClick={(e) => setFilter('completed')} style={{ color: "hsl(220, 98%, 61%)" }}>Completed</p1></div>)}    <p1 onClick={(e) => deleteChecked()}>Clear Completed</p1></FinalItem>}
+          </Todos>
         </MainContainer>
       </Body>
     </Container>
