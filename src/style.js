@@ -112,6 +112,9 @@ const FinalItem = styled(Item)`
   border-width: 0;
   font-size: 16px;
   color: ${({theme}) => theme.TextFinal};
+  @media (max-width: 500px){
+    font-size: 12px;
+  }
   div{
     justify-content: space-around;
     p1{
@@ -136,6 +139,10 @@ const CheckIcon = styled.div`
   }
   svg:hover {
     color: hsl(220, 98%, 61%);
+  }
+  @media (max-width: 500px){
+    margin-bottom: 10%;
+    width: 15%;
   }
 `
 const DeleteIcon = styled.div`
