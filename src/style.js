@@ -131,8 +131,7 @@ const ThemeIcon = styled.div`
   margin: auto;
 `
 const CheckIcon = styled.div`
-  width: 4vw;
-  height: 2.5vh;
+  width: 12%;
   margin-bottom: auto;
   svg {
     margin: 0.7em;
